@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        JAVA_HOME = "C:\\Program Files\\Java\\jdk-21"  // adjust if needed
+        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
+    }
+
     stages {
 
         // ===== FRONTEND BUILD =====
@@ -13,10 +18,9 @@ pipeline {
             }
         }
 
-        // ===== COPY FRONTEND TO BACKEND =====
-        stage('Integrate Frontend into Backend') {
+        // ===== INTEGRATE FRONTEND INTO BACKEND =====
+        stage('Integrate Frontend') {
             steps {
-                // Copy frontend build into Spring Boot static folder
                 bat '''
                 if exist "Backend\\demo\\src\\main\\resources\\static" (
                     rmdir /S /Q "Backend\\demo\\src\\main\\resources\\static"
@@ -28,34 +32,31 @@ pipeline {
         }
 
         // ===== BACKEND BUILD =====
-        stage('Build Backend') {
+        stage('Build Backend WAR') {
             steps {
-                dir('Backend/demo') { 
+                dir('Backend/demo') {
                     bat 'mvn clean package'
                 }
             }
         }
 
-        // ===== DEPLOY BACKEND (with frontend included) =====
-        stage('Deploy Backend to Tomcat') {
+        // ===== RUN WAR =====
+        stage('Run Application') {
             steps {
                 bat '''
-                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT.war" (
-                    del /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT.war"
-                )
-                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT" (
-                    rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT"
-                )
-                copy "Backend\\demo\\target\\*.war" "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT.war"
+                REM Kill existing process on port 8080 (optional)
+                for /f "tokens=5" %%a in ('netstat -a -n -o ^| findstr :8080 ^| findstr LISTENING') do taskkill /F /PID %%a
+
+                REM Run the Spring Boot WAR
+                start java -jar target\\demo-0.0.1-SNAPSHOT.war
                 '''
             }
         }
-
     }
 
     post {
         success {
-            echo 'Deployment Successful! Frontend and Backend are now served together.'
+            echo 'Frontend and Backend built and running successfully!'
         }
         failure {
             echo 'Pipeline Failed.'
