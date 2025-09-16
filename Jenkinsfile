@@ -1,14 +1,8 @@
 pipeline {
     agent any
 
-    environment {
-        JAVA_HOME = "C:\\Program Files\\Java\\jdk-21"  // adjust if needed
-        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
-    }
-
     stages {
 
-        // ===== FRONTEND BUILD =====
         stage('Build Frontend') {
             steps {
                 dir('frontend') {
@@ -18,20 +12,16 @@ pipeline {
             }
         }
 
-        // ===== INTEGRATE FRONTEND INTO BACKEND =====
         stage('Integrate Frontend') {
             steps {
                 bat '''
-                if exist "Backend\\demo\\src\\main\\resources\\static" (
-                    rmdir /S /Q "Backend\\demo\\src\\main\\resources\\static"
-                )
+                if exist "Backend\\demo\\src\\main\\resources\\static" rmdir /S /Q "Backend\\demo\\src\\main\\resources\\static"
                 mkdir "Backend\\demo\\src\\main\\resources\\static"
                 xcopy /E /I /Y frontend\\dist\\* Backend\\demo\\src\\main\\resources\\static\\
                 '''
             }
         }
 
-        // ===== BACKEND BUILD =====
         stage('Build Backend WAR') {
             steps {
                 dir('Backend/demo') {
@@ -40,15 +30,21 @@ pipeline {
             }
         }
 
-        // ===== RUN WAR =====
-        stage('Run Application') {
+        stage('Deploy to Tomcat') {
             steps {
                 bat '''
-                REM Kill existing process on port 8080 (optional)
-                for /f "tokens=5" %%a in ('netstat -a -n -o ^| findstr :8080 ^| findstr LISTENING') do taskkill /F /PID %%a
+                REM Stop Tomcat
+                "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\shutdown.bat"
+                
+                REM Remove old WAR and exploded folder
+                rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\demo"
+                del /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\demo.war"
 
-                REM Run the Spring Boot WAR
-                start java -jar target\\demo-0.0.1-SNAPSHOT.war
+                REM Copy new WAR
+                copy Backend\\demo\\target\\demo.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\"
+
+                REM Start Tomcat
+                "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\startup.bat"
                 '''
             }
         }
@@ -56,10 +52,10 @@ pipeline {
 
     post {
         success {
-            echo 'Frontend and Backend built and running successfully!'
+            echo 'Frontend and Backend built and deployed to Tomcat successfully!'
         }
         failure {
-            echo 'Pipeline Failed.'
+            echo 'Build or deployment failed.'
         }
     }
 }
