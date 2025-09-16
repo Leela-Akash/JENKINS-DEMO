@@ -13,15 +13,16 @@ pipeline {
             }
         }
 
-        // ===== FRONTEND DEPLOY =====
-        stage('Deploy Frontend to Tomcat') {
+        // ===== COPY FRONTEND TO BACKEND =====
+        stage('Integrate Frontend into Backend') {
             steps {
+                // Copy frontend build into Spring Boot static folder
                 bat '''
-                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT" (
-                    rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT"
+                if exist "Backend\\demo\\src\\main\\resources\\static" (
+                    rmdir /S /Q "Backend\\demo\\src\\main\\resources\\static"
                 )
-                mkdir "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT"
-                xcopy /E /I /Y frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\ROOT"
+                mkdir "Backend\\demo\\src\\main\\resources\\static"
+                xcopy /E /I /Y frontend\\dist\\* Backend\\demo\\src\\main\\resources\\static\\
                 '''
             }
         }
@@ -35,7 +36,7 @@ pipeline {
             }
         }
 
-        // ===== BACKEND DEPLOY =====
+        // ===== DEPLOY BACKEND (with frontend included) =====
         stage('Deploy Backend to Tomcat') {
             steps {
                 bat '''
@@ -54,7 +55,7 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment Successful!'
+            echo 'Deployment Successful! Frontend and Backend are now served together.'
         }
         failure {
             echo 'Pipeline Failed.'
