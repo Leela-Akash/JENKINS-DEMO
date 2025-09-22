@@ -64,6 +64,7 @@
 	</dependencies>
 
 	<build>
+	<finalName>springbootvolunteerapi</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
