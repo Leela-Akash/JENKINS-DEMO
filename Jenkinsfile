@@ -21,7 +21,8 @@ pipeline {
             rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\reactvolunteerapi"
         )
         mkdir "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\reactvolunteerapi"
-        xcopy /E /I /Y "frontend-practice\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\reactvolunteerapi"
+       xcopy /E /I /Y "frontend-practice\\dist\\*" "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\reactvolunteerapi"
+
         '''
     }
 }
