@@ -1,5 +1,4 @@
 const config = {
-    url: "http://localhost:1950/volunteerapi",
+    url: "http://localhost:1950/springbootvolunteerapi/"
 }
-
 export default config;

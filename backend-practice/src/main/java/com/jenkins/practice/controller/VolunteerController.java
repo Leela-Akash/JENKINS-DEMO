@@ -11,7 +11,7 @@ import com.jenkins.practice.entity.Volunteer;
 import com.jenkins.practice.service.VolunteerService;
 
 @RestController
-@RequestMapping("/volunteerapi/")
+@RequestMapping("/")
 @CrossOrigin(origins = "*")
 public class VolunteerController {
 
