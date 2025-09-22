@@ -18,7 +18,7 @@ public class VolunteerController {
     @Autowired
     private VolunteerService volunteerService;
 
-    @GetMapping("/")
+    @GetMapping("/c")
     public String home() {
         return "Volunteer Hours Tracker API is running!";
     }
