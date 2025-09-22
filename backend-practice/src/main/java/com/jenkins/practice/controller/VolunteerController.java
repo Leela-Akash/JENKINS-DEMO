@@ -11,14 +11,14 @@ import com.jenkins.practice.entity.Volunteer;
 import com.jenkins.practice.service.VolunteerService;
 
 @RestController
-@RequestMapping("/")
-@CrossOrigin(origins = "*")
+@RequestMapping("/springbootvolunteerapi")
+@CrossOrigin(origins = "http://localhost:5173") // allow your frontend
 public class VolunteerController {
 
     @Autowired
     private VolunteerService volunteerService;
 
-    @GetMapping("/c")
+    @GetMapping("/")
     public String home() {
         return "Volunteer Hours Tracker API is running!";
     }

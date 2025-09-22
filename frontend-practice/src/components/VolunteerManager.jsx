@@ -19,7 +19,7 @@ const VolunteerManager = () => {
   const [message, setMessage] = useState('');
   const [editMode, setEditMode] = useState(false);
 
-  const baseUrl = `${config.url}/volunteerapi`;
+  const baseUrl = config.url;
 
   useEffect(() => {
     fetchAllEvents();
@@ -40,9 +40,13 @@ const VolunteerManager = () => {
     setEvent({ ...event, [e.target.name]: e.target.value });
   };
 
-  // ✅ Validate form before submit
+  // ✅ Validate form
   const validateForm = () => {
-    for (let key in event) {
+    const keysToCheck = editMode
+      ? ['eventName', 'description', 'date', 'hours', 'volunteerName', 'contact']
+      : ['eventName', 'description', 'date', 'hours', 'volunteerName', 'contact'];
+
+    for (let key of keysToCheck) {
       if (!event[key] || event[key].toString().trim() === '') {
         setMessage(`⚠️ Please fill out the "${key}" field.`);
         return false;
@@ -51,11 +55,12 @@ const VolunteerManager = () => {
     return true;
   };
 
-  // ✅ Add new event
+  // ✅ Add new event (exclude id)
   const addEvent = async () => {
     if (!validateForm()) return;
     try {
-      await axios.post(`${baseUrl}/add`, event);
+      const { id, ...eventData } = event; // remove id
+      await axios.post(`${baseUrl}/add`, eventData);
       setMessage('✅ Event added successfully.');
       fetchAllEvents();
       resetForm();
@@ -88,7 +93,7 @@ const VolunteerManager = () => {
     }
   };
 
-  // ✅ Fetch by ID
+  // ✅ Fetch event by ID
   const getEventById = async () => {
     if (!idToFetch) {
       setMessage('⚠️ Enter an ID to fetch.');
@@ -127,7 +132,6 @@ const VolunteerManager = () => {
 
   return (
     <div className="student-container">
-      {/* Message Banner */}
       {message && (
         <div className={`message-banner ${message.includes('❌') ? 'error' : 'success'}`}>
           {message}
@@ -140,7 +144,16 @@ const VolunteerManager = () => {
       <div>
         <h3>{editMode ? 'Edit Event' : 'Add Event'}</h3>
         <div className="form-grid">
-          <input type="number" name="id" placeholder="ID" value={event.id} onChange={handleChange} />
+          {editMode && (
+            <input
+              type="number"
+              name="id"
+              placeholder="ID"
+              value={event.id}
+              onChange={handleChange}
+              disabled // ✅ ID is read-only in edit mode
+            />
+          )}
           <input type="text" name="eventName" placeholder="Event Name" value={event.eventName} onChange={handleChange} />
           <input type="text" name="description" placeholder="Description" value={event.description} onChange={handleChange} />
           <input type="date" name="date" value={event.date} onChange={handleChange} />

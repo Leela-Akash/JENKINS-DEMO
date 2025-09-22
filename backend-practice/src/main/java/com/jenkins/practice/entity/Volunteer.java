@@ -14,7 +14,7 @@ public class Volunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment ID
     @Column(name = "event_id")
-    private int id;
+    private Integer id;  // ✅ use Integer, not int
 
     @Column(name = "event_name", nullable = false, length = 100)
     private String eventName;
@@ -23,17 +23,17 @@ public class Volunteer {
     private String description;
 
     @Column(name = "event_date", nullable = false, length = 20)
-    private String date; // you can switch to LocalDate if needed
+    private String date;
 
     @Column(name = "event_hours", nullable = false)
     private int hours;
 
     // Getters & Setters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
