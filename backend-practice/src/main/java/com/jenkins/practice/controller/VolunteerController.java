@@ -12,7 +12,7 @@ import com.jenkins.practice.service.VolunteerService;
 
 @RestController
 @RequestMapping("/springbootvolunteerapi")
-@CrossOrigin(origins = "http://localhost:5173") // allow your frontend
+@CrossOrigin(origins = "*") // allow your frontend
 public class VolunteerController {
 
     @Autowired
