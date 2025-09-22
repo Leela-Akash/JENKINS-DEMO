@@ -11,8 +11,8 @@ import com.jenkins.practice.entity.Volunteer;
 import com.jenkins.practice.service.VolunteerService;
 
 @RestController
-@RequestMapping("/springbootvolunteerapi")
-@CrossOrigin(origins = "*") // allow your frontend
+@RequestMapping("/") // removed redundant /springbootvolunteerapi
+@CrossOrigin(origins = "*")
 public class VolunteerController {
 
     @Autowired
@@ -23,21 +23,17 @@ public class VolunteerController {
         return "Volunteer Hours Tracker API is running!";
     }
 
-    // Create
     @PostMapping("/add")
     public ResponseEntity<Volunteer> addEvent(@RequestBody Volunteer event) {
         Volunteer savedEvent = volunteerService.addEvent(event);
         return new ResponseEntity<>(savedEvent, HttpStatus.CREATED);
     }
 
-    // Read All
     @GetMapping("/all")
     public ResponseEntity<List<Volunteer>> getAllEvents() {
-        List<Volunteer> events = volunteerService.getAllEvents();
-        return new ResponseEntity<>(events, HttpStatus.OK);
+        return new ResponseEntity<>(volunteerService.getAllEvents(), HttpStatus.OK);
     }
 
-    // Read by ID
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getEventById(@PathVariable int id) {
         Volunteer event = volunteerService.getEventById(id);
@@ -48,19 +44,16 @@ public class VolunteerController {
         }
     }
 
-    // Update
     @PutMapping("/update")
     public ResponseEntity<?> updateEvent(@RequestBody Volunteer event) {
         Volunteer existing = volunteerService.getEventById(event.getId());
         if (existing != null) {
-            Volunteer updatedEvent = volunteerService.updateEvent(event);
-            return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+            return new ResponseEntity<>(volunteerService.updateEvent(event), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Cannot update. Event with ID " + event.getId() + " not found.", HttpStatus.NOT_FOUND);
         }
     }
 
-    // Delete
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteEvent(@PathVariable int id) {
         Volunteer existing = volunteerService.getEventById(id);
