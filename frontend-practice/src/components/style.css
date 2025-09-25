@@ -1,140 +1,167 @@
 .volunteer-container {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 40px auto;
   padding: 30px;
-  border-radius: 12px;
-  background-color: white;
-  box-shadow: 0px 4px 16px black;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 16px;
+  background: #f9fafb;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Headings */
 h2, h3 {
-  color: #333;
-  margin-bottom: 10px;
+  color: #1e293b;
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
+/* Inputs */
 input, select {
-  padding: 10px;
-  margin: 8px 0;
+  padding: 12px;
+  margin: 10px 0;
   width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
   box-sizing: border-box;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+input:focus, select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  outline: none;
+}
+
+/* Form Grid */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
 }
 
-.btn-group {
-  margin-top: 10px;
-}
-
+/* Buttons */
 button {
-  padding: 10px 16px;
-  margin: 10px 8px 10px 0;
+  padding: 10px 18px;
+  margin: 12px 10px 12px 0;
   border: none;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: transform 0.15s ease, background-color 0.25s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
 }
 
 .btn-blue {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
 }
-
 .btn-blue:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
 }
 
 .btn-green {
-  background-color: #28a745;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
 }
-
 .btn-green:hover {
-  background-color: #1c7c34;
+  background: linear-gradient(135deg, #16a34a, #15803d);
 }
 
 .btn-red {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
 }
-
 .btn-red:hover {
-  background-color: #a71d2a;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
 }
 
 .btn-gray {
-  background-color: #6c757d;
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+.btn-gray:hover {
+  background: linear-gradient(135deg, #4b5563, #374151);
 }
 
-.btn-gray:hover {
-  background-color: #565e64;
+/* Table */
+.table-wrapper {
+  margin-top: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 3px 12px rgba(0,0,0,0.05);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  background-color: white;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
 }
 
 th, td {
-  padding: 12px 14px;
+  padding: 14px 16px;
   text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e5e7eb;
   vertical-align: middle;
+  font-size: 0.95rem;
 }
 
 th {
-  background-color: #f1f1f1;
+  background: #f3f4f6;
+  color: #374151;
   font-weight: 600;
 }
 
+tr:hover td {
+  background: #f9fafb;
+}
+
+/* Action buttons inside table */
 .action-buttons {
   display: flex;
   gap: 8px;
 }
 
+/* JSON preview */
 pre {
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-radius: 6px;
+  background: #f1f5f9;
+  padding: 12px;
+  border-radius: 8px;
   overflow-x: auto;
+  font-size: 0.9rem;
 }
 
-.message {
-  margin-top: 20px;
-  color: #dc3545;
-  font-weight: 500;
-}
-
+/* Messages */
 .message-banner {
   position: fixed;
-  top: 10px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #4caf50; 
+  background: #22c55e;
   color: white;
   padding: 12px 24px;
-  border-radius: 6px;
-  font-weight: bold;
+  border-radius: 10px;
+  font-weight: 500;
   z-index: 1000;
   text-align: center;
-  min-width: 300px;
+  min-width: 280px;
   max-width: 80%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  animation: fadeSlideDown 0.3s ease;
 }
 
 .message-banner.error {
-  background-color: #f44336;
+  background: #ef4444;
 }
 
-.message-banner.success {
-  background-color: #4caf50; 
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
